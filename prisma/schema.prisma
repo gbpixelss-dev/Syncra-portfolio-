@@ -1,0 +1,255 @@
+// SYNCra Digital Agency — Prisma schema
+//
+// Architecture: Next.js -> Prisma -> PostgreSQL (Supabase).
+// DATABASE_URL  = pooled connection (runtime/application, serverless-safe)
+// DIRECT_URL    = direct connection (Prisma CLI / migrations only)
+// Both are read from environment variables — never hardcoded.
+//
+// This is the Phase 7 foundation schema. No data has been seeded
+// except (optionally, idempotently) the six already-approved public
+// services — see prisma/seed.ts.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ---------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------
+
+enum AdminRole {
+  SUPER_ADMIN
+  EDITOR
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  EMBED
+}
+
+enum TechnologyCategory {
+  DEVELOPMENT
+  DESIGN
+  VIDEO
+  AI
+  AUTOMATION
+  SOCIAL
+  OTHER
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  IN_DISCUSSION
+  WON
+  CLOSED
+}
+
+enum PreferredContact {
+  EMAIL
+  PHONE
+  WHATSAPP
+}
+
+// ---------------------------------------------------------------
+// Admin
+// ---------------------------------------------------------------
+
+model Admin {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(SUPER_ADMIN)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ---------------------------------------------------------------
+// Service
+// ---------------------------------------------------------------
+
+model Service {
+  id               String   @id @default(uuid())
+  name             String
+  slug             String   @unique
+  shortDescription String
+  description      String
+  order            Int      @default(0)
+  published        Boolean  @default(false)
+  seoTitle         String?
+  seoDescription   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  projects  ProjectService[]
+  inquiries InquiryService[]
+
+  @@index([published, order])
+}
+
+// ---------------------------------------------------------------
+// Project
+// ---------------------------------------------------------------
+
+model Project {
+  id             String   @id @default(uuid())
+  title          String
+  slug           String   @unique
+  client         String?
+  summary        String
+  overview       String?
+  challenge      String?
+  solution       String?
+  process        String?
+  results        String?
+  liveUrl        String?
+  featured       Boolean  @default(false)
+  published      Boolean  @default(false)
+  order          Int      @default(0)
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  services     ProjectService[]
+  technologies ProjectTechnology[]
+  media        ProjectMedia[]
+
+  @@index([published, featured, order])
+}
+
+// Project <-> Service (many-to-many)
+model ProjectService {
+  projectId String
+  serviceId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, serviceId])
+}
+
+// ---------------------------------------------------------------
+// Technology
+// ---------------------------------------------------------------
+
+model Technology {
+  id        String             @id @default(uuid())
+  name      String
+  slug      String             @unique
+  category  TechnologyCategory
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  projects ProjectTechnology[]
+}
+
+// Project <-> Technology (many-to-many)
+model ProjectTechnology {
+  projectId    String
+  technologyId String
+  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  technology   Technology @relation(fields: [technologyId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, technologyId])
+}
+
+// ---------------------------------------------------------------
+// Project media
+// ---------------------------------------------------------------
+
+model ProjectMedia {
+  id           String    @id @default(uuid())
+  projectId    String
+  project      Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type         MediaType
+  url          String
+  thumbnailUrl String?
+  alt          String?
+  caption      String?
+  order        Int       @default(0)
+  isHero       Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([projectId, order])
+}
+
+// ---------------------------------------------------------------
+// Testimonial
+// ---------------------------------------------------------------
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  name      String
+  role      String?
+  company   String?
+  quote     String
+  published Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------
+// Inquiry
+// ---------------------------------------------------------------
+
+model Inquiry {
+  id               String            @id @default(uuid())
+  name             String
+  company          String?
+  email            String
+  phone            String?
+  preferredContact PreferredContact
+  description      String
+  budget           String?
+  timeline         String?
+  currentWebsite   String?
+  status           InquiryStatus     @default(NEW)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  services InquiryService[]
+
+  @@index([status, createdAt])
+}
+
+// Inquiry <-> Service (many-to-many)
+model InquiryService {
+  inquiryId String
+  serviceId String
+  inquiry   Inquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([inquiryId, serviceId])
+}
+
+// ---------------------------------------------------------------
+// Site settings (singleton)
+// ---------------------------------------------------------------
+// Application code always reads/writes the row via a fixed known id
+// ("singleton") rather than querying "the first row" — see
+// src/lib/db.ts usage in a later phase. The `singleton` unique
+// boolean is a common Prisma pattern that makes a second row with
+// singleton = true a constraint violation, as a defense-in-depth
+// measure on top of the application-level convention.
+
+model SiteSettings {
+  id                    String   @id @default(uuid())
+  singleton             Boolean  @unique @default(true)
+  contactEmail          String?
+  whatsapp              String?
+  socialLinks           Json     @default("[]")
+  defaultSeoTitle       String?
+  defaultSeoDescription String?
+  analyticsProvider     String?
+  analyticsKey          String?
+  updatedAt             DateTime @updatedAt
+}

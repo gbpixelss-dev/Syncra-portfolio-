@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   SYNCra Digital Agency — Design Tokens
+   Single authoritative source for all token VALUES. Nothing in this
+   project should hardcode a color, radius, or container width outside
+   of this file — components/Tailwind config reference these variables.
+   ========================================================================== */
+:root {
+  /* Brand colors — approved palette. The logo keeps its own independent
+     metallic gradient and is never re-derived from these tokens. */
+  --color-deep-sea: #156874;
+  --color-deep-sea-dark: #0e4750;
+  --color-steam: #ede6e6;
+  --color-surface: #ffffff;
+  --color-ink: #1b2124;
+  --color-muted: #6e7a7d;
+
+  /* Structural — Blueprint hairline rules, kept restrained and
+     purposeful rather than decorative. */
+  --color-rule: #d8dcdd;
+
+  /* Spacing / layout */
+  --container-max-width: 1280px;
+  --gutter: 1rem; /* overridden at larger breakpoints below */
+
+  /* Radius — deliberately minimal per the Blueprint direction */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+
+  /* Typography — variables populated by next/font in layout.tsx */
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+
+/* ==========================================================================
+   Reset / base
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Selection
+   ========================================================================== */
+::selection {
+  background-color: var(--color-deep-sea);
+  color: var(--color-steam);
+}
+
+/* ==========================================================================
+   Focus visibility — accessibility foundation
+   ========================================================================== */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-deep-sea);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Blueprint structural primitives
+   Real, reusable, minimal — not decoration applied everywhere. Used only
+   where a later page genuinely needs a hairline rule or a real-data
+   annotation label.
+   ========================================================================== */
+.rule {
+  border: none;
+  border-top: 1px solid var(--color-rule);
+}
+
+.annotation {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+}
