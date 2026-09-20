@@ -86,37 +86,37 @@ const FALLBACK_SERVICES: readonly ServiceSummary[] = [
     name: "Web & Software Development",
     slug: "web-software-development",
     description: "Building websites and web applications, front-end through full-stack.",
-    ...SUPPLEMENTARY["web-software-development"],
+    ...SUPPLEMENTARY["web-software-development"]!,
   },
   {
     name: "Graphic Design",
     slug: "graphic-design",
     description: "Visual design for brands and print/digital materials.",
-    ...SUPPLEMENTARY["graphic-design"],
+    ...SUPPLEMENTARY["graphic-design"]!,
   },
   {
     name: "UI/UX Design",
     slug: "ui-ux-design",
     description: "Designing how digital products look and function.",
-    ...SUPPLEMENTARY["ui-ux-design"],
+    ...SUPPLEMENTARY["ui-ux-design"]!,
   },
   {
     name: "Video Production & Editing",
     slug: "video-production-editing",
     description: "Editing and producing video content.",
-    ...SUPPLEMENTARY["video-production-editing"],
+    ...SUPPLEMENTARY["video-production-editing"]!,
   },
   {
     name: "AI & Automation",
     slug: "ai-automation",
     description: "Applying AI tools and workflow automation to how a business operates.",
-    ...SUPPLEMENTARY["ai-automation"],
+    ...SUPPLEMENTARY["ai-automation"]!,
   },
   {
     name: "Social Media Management",
     slug: "social-media-management",
     description: "Ongoing management and content support for a client's social presence.",
-    ...SUPPLEMENTARY["social-media-management"],
+    ...SUPPLEMENTARY["social-media-management"]!,
   },
 ];
 
