@@ -125,3 +125,4 @@ npm run dev
 built in (registry access is blocked there) — see the phase completion
 reports for details. It should install normally on your machine or in
 a CI/Vercel environment with standard npm registry access.
+
