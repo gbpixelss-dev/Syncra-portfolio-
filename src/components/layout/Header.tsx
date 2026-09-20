@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "./Logo";
 import { DesktopNavigation } from "./DesktopNavigation";
-import { MobileNavigation } from "./MobileNavigation";
+import MobileNavigation from "./MobileNavigation";
 import { MobileMenuButton } from "./MobileMenuButton";
 import { StartProjectButton } from "./StartProjectButton";
 
