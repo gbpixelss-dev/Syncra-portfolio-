@@ -1,42 +1,11 @@
-        onClose();
-        return;
-      }
+"use client";
 
-      if (event.key !== "Tab" || !panelRef.current) return;
+import Link from "next/link";
 
-      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled])'
-      );
-      if (focusable.length === 0) return;
+type Props={isOpen:boolean;onClose:()=>void};
+const links=[{href:"/",label:"Home"},{href:"/services",label:"Services"},{href:"/portfolio",label:"Portfolio"},{href:"/about",label:"About"},{href:"/contact",label:"Contact"}];
 
-      const first = focusable[0];
-      const last = focusable.item(focusable.length - 1);
-      if (!last) return;
-
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen, onClose]);
-
-  return (
-    <div
-      ref={panelRef}
-      id="mobile-navigation"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Mobile navigation"
-      hidden={!isOpen}
-      className="fixed inset-0 z-50 flex flex-col bg-surface motion-safe:transition-opacity motion-safe:duration-150 md:hidden"
-    >
+export default function MobileNavigation({isOpen,onClose}:Props){
+ if(!isOpen) return null;
+ return (<div className="fixed inset-0 z-50 bg-surface md:hidden"><div className="flex items-center justify-between p-6"><span className="font-semibold">SYNCra</span><button onClick={onClose} aria-label="Close">✕</button></div><nav className="flex flex-col gap-4 p-6">{links.map(l=><Link key={l.href} href={l.href} onClick={onClose} className="text-lg">{l.label}</Link>)}</nav></div>);
+}
