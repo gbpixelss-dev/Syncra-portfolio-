@@ -56,7 +56,10 @@ export const getTechnologiesByServiceSlug = cache(
     const seen = new Map<string, string>();
     for (const project of projects) {
       project.technologySlugs.forEach((slug, i) => {
-        seen.set(slug, project.technologyNames[i]);
+        const name = project.technologyNames[i];
+        if (name !== undefined) {
+          seen.set(slug, name);
+        }
       });
     }
     return [...seen.entries()].map(([slug, name]) => ({ slug, name }));
