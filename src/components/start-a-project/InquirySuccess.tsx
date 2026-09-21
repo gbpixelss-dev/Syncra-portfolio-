@@ -4,12 +4,12 @@ import type { SiteContact } from "@/lib/site-settings";
 
 export function InquirySuccess({ contact }: { contact: SiteContact }) {
   return (
-    <div className="rounded-3xl border border-rule bg-steam p-8 text-center shadow-sm sm:p-12">
-      {/* Success Icon */}
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+    <div className="rounded-3xl border border-rule bg-steam p-8 text-center shadow-sm transition-all duration-500 sm:p-12">
+      {/* Animated Success Icon */}
+      <div className="mx-auto flex h-20 w-20 animate-pulse items-center justify-center rounded-full bg-green-100 text-green-600">
         <svg
-          width="36"
-          height="36"
+          width="40"
+          height="40"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
@@ -31,7 +31,7 @@ export function InquirySuccess({ contact }: { contact: SiteContact }) {
         </svg>
       </div>
 
-      <p className="mt-4 annotation">Request Sent Successfully</p>
+      <p className="mt-5 annotation">Request Sent Successfully</p>
 
       <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
         Thanks! We&apos;ll contact you shortly.
@@ -39,15 +39,15 @@ export function InquirySuccess({ contact }: { contact: SiteContact }) {
 
       <p className="mx-auto mt-4 max-w-prose text-muted">
         Your project inquiry has been received. Our team will reach out through
-        your preferred contact method as soon as possible.
+        your preferred contact method within 24 hours.
       </p>
 
-      {/* Contact Icons */}
-      <div className="mt-8 flex justify-center gap-5">
+      {/* Contact Buttons */}
+      <div className="mt-8 flex justify-center gap-4">
         <a
           href={getWhatsappUrl(contact.whatsapp)}
           aria-label="Chat on WhatsApp"
-          className="rounded-full bg-green-500 p-4 text-white transition hover:scale-105 hover:bg-green-600"
+          className="rounded-full bg-green-500 p-4 text-white transition duration-200 hover:scale-105 hover:bg-green-600 active:scale-95"
         >
           <svg
             width="24"
@@ -73,7 +73,7 @@ export function InquirySuccess({ contact }: { contact: SiteContact }) {
         <a
           href={getEmailUrl(contact.email)}
           aria-label="Send Email"
-          className="rounded-full bg-slate-900 p-4 text-white transition hover:scale-105 hover:bg-black"
+          className="rounded-full bg-slate-900 p-4 text-white transition duration-200 hover:scale-105 hover:bg-black active:scale-95"
         >
           <svg
             width="24"
@@ -100,7 +100,7 @@ export function InquirySuccess({ contact }: { contact: SiteContact }) {
       </div>
 
       <p className="mt-3 text-sm text-muted">
-        Prefer direct contact? Tap an icon above.
+        Need to follow up? Use the buttons above.
       </p>
 
       <Link
