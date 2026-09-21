@@ -9,13 +9,14 @@ import type { SiteContact } from "@/lib/site-settings";
 
 type ServiceOption = { id: string; name: string };
 
-const PREFERRED_CONTACT_LABELS: Record<string, string> = {
-  EMAIL: "Email",
-  PHONE: "Phone",
-  WHATSAPP: "WhatsApp",
-};
-
 const INITIAL_STATE: InquiryActionState = { status: "idle" };
+
+const budgetOptions = [
+  "Under ₦50k",
+  "₦50k–₦150k",
+  "₦150k–₦500k",
+  "₦500k+",
+];
 
 export function StartProjectForm({
   services,
@@ -24,7 +25,7 @@ export function StartProjectForm({
   services: ServiceOption[];
   contact: SiteContact;
 }) {
-  const [state, formAction] = useActionState<InquiryActionState, FormData>(
+  const [state, formAction] = useActionState(
     submitInquiry,
     INITIAL_STATE
   );
@@ -36,196 +37,169 @@ export function StartProjectForm({
   const values = state.values;
 
   return (
-    <form action={formAction} className="max-w-2xl space-y-10">
-      {state.error && (
-        <p role="alert" className="rounded bg-red-50 p-3 text-sm text-red-700">
-          {state.error}
-        </p>
-      )}
+    <form action={formAction} className="mx-auto max-w-2xl">
+      <div className="rounded-3xl border border-rule bg-surface p-6 shadow-sm sm:p-8">
 
-      {/* Honeypot — hidden from sighted and keyboard/screen-reader
-          users; a filled value means a bot, not a person. */}
-      <div aria-hidden="true" className="sr-only">
-        <label htmlFor="website_url">Leave this field empty</label>
-        <input
-          id="website_url"
-          name="website_url"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
-      </div>
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-bold text-ink">
+            Start Your Project
+          </h2>
+          <p className="mt-2 text-muted">
+            Tell us what you need and we'll get back to you within 24 hours.
+          </p>
+        </div>
 
-      <fieldset>
-        <legend className="text-lg font-semibold text-ink">
-          What do you need?
-        </legend>
-        <p className="mt-1 text-sm text-muted">Select one or more services.</p>
-        {state.fieldErrors?.serviceIds && (
-          <p className="mt-1 text-sm text-red-700">
-            {state.fieldErrors.serviceIds[0]}
+        {state.error && (
+          <p className="mb-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">
+            {state.error}
           </p>
         )}
-        <div className="mt-3 flex flex-wrap gap-4">
-          {services.map((service) => (
-            <label
-              key={service.id}
-              className="flex items-center gap-2 text-sm text-ink"
-            >
-              <input
-                type="checkbox"
-                name="serviceIds"
-                value={service.id}
-                defaultChecked={values?.serviceIds.includes(service.id)}
-              />
-              {service.name}
-            </label>
-          ))}
-        </div>
-      </fieldset>
 
-      <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold text-ink">
-          Tell us about it
-        </legend>
+        <div className="space-y-6">
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-ink">
-            Project description
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            required
-            rows={5}
-            defaultValue={values?.description}
-            className="mt-1 w-full rounded border border-rule bg-surface px-3 py-2 text-ink focus-visible:border-deep-sea"
-          />
-          {state.fieldErrors?.description && (
-            <p className="mt-1 text-sm text-red-700">
-              {state.fieldErrors.description[0]}
-            </p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            label="Budget (optional)"
-            name="budget"
-            defaultValue={values?.budget}
-          />
-          <TextField
-            label="Timeline (optional)"
-            name="timeline"
-            defaultValue={values?.timeline}
-          />
-        </div>
-
-        <TextField
-          label="Current website/platform (optional)"
-          name="currentWebsite"
-          defaultValue={values?.currentWebsite}
-        />
-      </fieldset>
-
-      <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold text-ink">
-          How do we reach you?
-        </legend>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            label="Name"
+          <Field
+            label="Full Name"
             name="name"
             defaultValue={values?.name}
             required
-            errors={state.fieldErrors?.name}
           />
-          <TextField
-            label="Company (optional)"
-            name="company"
-            defaultValue={values?.company}
-          />
-        </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            defaultValue={values?.email}
-            required
-            errors={state.fieldErrors?.email}
-          />
-          <TextField
-            label="Phone"
-            name="phone"
-            defaultValue={values?.phone}
-            required
-            errors={state.fieldErrors?.phone}
-          />
-        </div>
+          <div className="grid gap-5 sm:grid-cols-2">
 
-        <div>
-          <span className="block text-sm font-medium text-ink">
-            Preferred contact method
-          </span>
-          <div className="mt-2 flex flex-wrap gap-4">
-            {Object.entries(PREFERRED_CONTACT_LABELS).map(([value, label]) => (
-              <label key={value} className="flex items-center gap-2 text-sm text-ink">
-                <input
-                  type="radio"
-                  name="preferredContact"
-                  value={value}
-                  required
-                  defaultChecked={values?.preferredContact === value}
-                />
-                {label}
-              </label>
-            ))}
+            <Field
+              label="Email"
+              name="email"
+              type="email"
+              defaultValue={values?.email}
+              required
+            />
+
+            <Field
+              label="WhatsApp Number"
+              name="phone"
+              defaultValue={values?.phone}
+              required
+            />
+
           </div>
-          {state.fieldErrors?.preferredContact && (
-            <p className="mt-1 text-sm text-red-700">
-              {state.fieldErrors.preferredContact[0]}
-            </p>
-          )}
-        </div>
-      </fieldset>
 
-      <SubmitButton pendingLabel="Sending…">Send inquiry</SubmitButton>
+          <div>
+
+            <label className="mb-2 block text-sm font-semibold text-ink">
+              Service
+            </label>
+
+            <select
+              name="serviceIds"
+              required
+              defaultValue={values?.serviceIds?.[0] ?? ""}
+              className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink"
+            >
+              <option value="">Select a service</option>
+
+              {services.map((service) => (
+                <option key={service.id} value={service.id}>
+                  {service.name}
+                </option>
+              ))}
+            </select>
+
+          </div>
+
+          <div>
+
+            <label className="mb-3 block text-sm font-semibold text-ink">
+              Estimated Budget
+            </label>
+
+            <div className="flex flex-wrap gap-3">
+
+              {budgetOptions.map((budget) => (
+                <label key={budget}>
+                  <input
+                    type="radio"
+                    name="budget"
+                    value={budget}
+                    className="peer sr-only"
+                    defaultChecked={values?.budget === budget}
+                  />
+
+                  <span className="inline-flex cursor-pointer rounded-full border border-rule px-4 py-2 text-sm transition peer-checked:border-deep-sea peer-checked:bg-deep-sea peer-checked:text-white">
+                    {budget}
+                  </span>
+
+                </label>
+              ))}
+
+            </div>
+
+          </div>
+
+          <Field
+            label="Timeline (Optional)"
+            name="timeline"
+            defaultValue={values?.timeline}
+          />
+
+          <div>
+
+            <label className="mb-2 block text-sm font-semibold text-ink">
+              Project Notes (Optional)
+            </label>
+
+            <textarea
+              name="description"
+              rows={5}
+              defaultValue={values?.description}
+              className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink"
+              placeholder="Briefly describe your project..."
+            />
+
+          </div>
+
+          <div className="pt-2">
+
+            <SubmitButton pendingLabel="Sending...">
+              Submit Inquiry
+            </SubmitButton>
+
+          </div>
+
+        </div>
+
+      </div>
     </form>
   );
 }
 
-function TextField({
+function Field({
   label,
   name,
   type = "text",
   defaultValue,
   required,
-  errors,
 }: {
   label: string;
   name: string;
   type?: string;
   defaultValue?: string;
   required?: boolean;
-  errors?: string[];
 }) {
   return (
     <div>
-      <label htmlFor={name} className="block text-sm font-medium text-ink">
+
+      <label className="mb-2 block text-sm font-semibold text-ink">
         {label}
       </label>
+
       <input
-        id={name}
         name={name}
         type={type}
         defaultValue={defaultValue}
         required={required}
-        className="mt-1 w-full rounded border border-rule bg-surface px-3 py-2 text-ink focus-visible:border-deep-sea"
+        className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink"
       />
-      {errors && <p className="mt-1 text-sm text-red-700">{errors[0]}</p>}
+
     </div>
   );
 }
