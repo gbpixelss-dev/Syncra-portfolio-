@@ -34,7 +34,7 @@ export function InquirySuccess({ contact }: { contact: SiteContact }) {
       <p className="mt-4 annotation">Request Sent Successfully</p>
 
       <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-3xl">
-        Thanks! We'll contact you shortly.
+        Thanks! We&apos;ll contact you shortly.
       </h2>
 
       <p className="mx-auto mt-4 max-w-prose text-muted">
