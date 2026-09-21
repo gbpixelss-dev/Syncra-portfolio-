@@ -45,7 +45,7 @@ export function StartProjectForm({
             Start Your Project
           </h2>
           <p className="mt-2 text-muted">
-            Tell us what you need and we'll get back to you within 24 hours.
+            Tell us what you need and we&apos;ll get back to you within 24 hours.
           </p>
         </div>
 
