@@ -5,19 +5,59 @@ const prisma = new PrismaClient();
 
 async function seedServices() {
   const services = [
-    { name: "Web Development", slug: "web-development", order: 1 },
-    { name: "Graphic Design", slug: "graphic-design", order: 2 },
-    { name: "Brand Identity", slug: "brand-identity", order: 3 },
-    { name: "Video Editing", slug: "video-editing", order: 4 },
-    { name: "Content Creation", slug: "content-creation", order: 5 },
-    { name: "Automation", slug: "automation", order: 6 },
+    {
+      name: "Web Development",
+      slug: "web-development",
+      shortDescription: "Business websites, landing pages and web apps.",
+      order: 1,
+    },
+    {
+      name: "Graphic Design",
+      slug: "graphic-design",
+      shortDescription: "Flyers, branding and social media designs.",
+      order: 2,
+    },
+    {
+      name: "Brand Identity",
+      slug: "brand-identity",
+      shortDescription: "Logos, colors and complete brand systems.",
+      order: 3,
+    },
+    {
+      name: "Video Editing",
+      slug: "video-editing",
+      shortDescription: "Short-form videos and professional edits.",
+      order: 4,
+    },
+    {
+      name: "Content Creation",
+      slug: "content-creation",
+      shortDescription: "Content strategy and creative assets.",
+      order: 5,
+    },
+    {
+      name: "Automation",
+      slug: "automation",
+      shortDescription: "Workflow and business process automation.",
+      order: 6,
+    },
   ];
 
   for (const service of services) {
     await prisma.service.upsert({
       where: { slug: service.slug },
-      update: service,
-      create: { ...service, published: true },
+      update: {
+        name: service.name,
+        shortDescription: service.shortDescription,
+        order: service.order,
+      },
+      create: {
+        name: service.name,
+        slug: service.slug,
+        shortDescription: service.shortDescription,
+        order: service.order,
+        published: true,
+      },
     });
   }
 
