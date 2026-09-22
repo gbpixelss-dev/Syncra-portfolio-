@@ -1,4 +1,4 @@
-import { PrismaClient, UserRole } from "@prisma/client";
+  import { PrismaClient, AdminRole } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -34,7 +34,7 @@ async function seedServices() {
       slug: "video-editing",
       shortDescription: "Short-form videos and professional edits.",
       description:
-        "Professional video editing for YouTube, Instagram, TikTok, commercials and promotional content.",
+        "Professional video editing for YouTube, Instagram, TikTok and promotional content.",
       order: 4,
     },
     {
@@ -50,7 +50,7 @@ async function seedServices() {
       slug: "automation",
       shortDescription: "Workflow and business process automation.",
       description:
-        "Workflow automation, integrations and systems that help businesses save time and reduce manual work.",
+        "Workflow automation, integrations and systems that save businesses time.",
       order: 6,
     },
   ];
@@ -88,18 +88,18 @@ async function bootstrapAdmin() {
     return;
   }
 
-  const hashedPassword = await bcrypt.hash(password, 12);
+  const passwordHash = await bcrypt.hash(password, 12);
 
-  await prisma.user.upsert({
+  await prisma.admin.upsert({
     where: { email },
     update: {
-      password: hashedPassword,
-      role: UserRole.SUPER_ADMIN,
+      passwordHash,
+      role: AdminRole.SUPER_ADMIN,
     },
     create: {
       email,
-      password: hashedPassword,
-      role: UserRole.SUPER_ADMIN,
+      passwordHash,
+      role: AdminRole.SUPER_ADMIN,
     },
   });
 
