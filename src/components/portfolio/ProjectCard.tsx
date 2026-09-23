@@ -11,12 +11,10 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
     >
       <article className="glass-card relative h-full overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.03] transition-all duration-500 hover:-translate-y-2 hover:border-cyan-400/35 hover:shadow-[0_0_45px_rgba(46,197,255,.18)]">
 
-        {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
           <div className="absolute -top-12 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full bg-cyan-400/12 blur-3xl" />
         </div>
 
-        {/* Premium placeholder panel */}
         <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br from-[#08111f] via-[#0b1528] to-[#050816]">
           <div className="absolute inset-0 opacity-10 hero-grid" />
 
@@ -41,7 +39,6 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#050816] via-transparent to-transparent" />
         </div>
 
-        {/* Content */}
         <div className="flex flex-1 flex-col justify-between p-6">
           <div>
             <h3 className="text-2xl font-semibold text-white transition group-hover:text-cyan-300">
@@ -49,7 +46,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
             </h3>
 
             <p className="mt-3 text-sm leading-7 text-slate-300">
-              {project.summary}
+              {project.description}
             </p>
           </div>
 
