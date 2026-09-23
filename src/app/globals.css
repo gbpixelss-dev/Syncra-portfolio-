@@ -250,3 +250,9 @@ a {
     linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
   background-size:48px 48px;
 }
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(46,197,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
+  background-size:48px 48px;
+}
