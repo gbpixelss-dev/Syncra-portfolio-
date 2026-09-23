@@ -27,7 +27,8 @@
     "next-auth": "4.24.11",
     "bcryptjs": "2.4.3",
     "zod": "3.24.1",
-    "resend": "4.0.1"
+    "resend": "4.0.1",
+    "framer-motion": "^12.23.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.2.0",
