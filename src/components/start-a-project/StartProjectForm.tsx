@@ -9,20 +9,13 @@ import type { SiteContact } from "@/lib/site-settings";
 
 type ServiceOption = { id: string; name: string };
 
+const PREFERRED_CONTACT_LABELS = {
+  EMAIL: "Email",
+  PHONE: "Phone",
+  WHATSAPP: "WhatsApp",
+};
+
 const INITIAL_STATE: InquiryActionState = { status: "idle" };
-
-const CONTACT_OPTIONS = [
-  { value: "WHATSAPP", label: "WhatsApp" },
-  { value: "EMAIL", label: "Email" },
-  { value: "PHONE", label: "Phone" },
-] as const;
-
-const BUDGET_OPTIONS = [
-  "Under ₦50k",
-  "₦50k – ₦150k",
-  "₦150k – ₦500k",
-  "₦500k+",
-];
 
 export function StartProjectForm({
   services,
@@ -31,10 +24,7 @@ export function StartProjectForm({
   services: ServiceOption[];
   contact: SiteContact;
 }) {
-  const [state, formAction] = useActionState<InquiryActionState, FormData>(
-    submitInquiry,
-    INITIAL_STATE
-  );
+  const [state, formAction] = useActionState(submitInquiry, INITIAL_STATE);
 
   if (state.status === "success") {
     return <InquirySuccess contact={contact} />;
@@ -43,173 +33,144 @@ export function StartProjectForm({
   const values = state.values;
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form
+      id="project-form"
+      action={formAction}
+      className="glass-card fade-up mx-auto max-w-3xl space-y-8 p-8 sm:p-10"
+    >
       {state.error && (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-300">
           {state.error}
-        </div>
+        </p>
       )}
 
-      {/* Honeypot */}
       <div aria-hidden="true" className="hidden">
-        <input name="website_url" type="text" autoComplete="off" tabIndex={-1} />
+        <input
+          name="website_url"
+          tabIndex={-1}
+          autoComplete="off"
+        />
       </div>
 
-      {/* Name + Company */}
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Full Name" htmlFor="name" required>
-          <input
-            id="name"
+      <fieldset className="glass-card fade-up p-6">
+        <legend className="text-xl font-semibold text-white">
+          What do you need?
+        </legend>
+
+        <div className="mt-4 flex flex-wrap gap-3">
+          {services.map((service) => (
+            <label
+              key={service.id}
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition hover:border-cyan-400/50 hover:bg-white/10"
+            >
+              <input
+                type="checkbox"
+                name="serviceIds"
+                value={service.id}
+                defaultChecked={values?.serviceIds?.includes(service.id)}
+                className="mr-2"
+              />
+              {service.name}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset className="glass-card fade-up fade-delay-1 p-6">
+        <legend className="text-xl font-semibold text-white">
+          Tell us about it
+        </legend>
+
+        <div className="mt-5 space-y-5">
+          <Field
+            label="Project description"
+            name="description"
+            textarea
+            required
+            defaultValue={values?.description}
+          />
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field
+              label="Budget"
+              name="budget"
+              defaultValue={values?.budget}
+            />
+            <Field
+              label="Timeline"
+              name="timeline"
+              defaultValue={values?.timeline}
+            />
+          </div>
+
+          <Field
+            label="Current website/platform"
+            name="currentWebsite"
+            defaultValue={values?.currentWebsite}
+          />
+        </div>
+      </fieldset>
+
+      <fieldset className="glass-card fade-up fade-delay-2 p-6">
+        <legend className="text-xl font-semibold text-white">
+          Your details
+        </legend>
+
+        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+          <Field
+            label="Full Name"
             name="name"
             required
             defaultValue={values?.name}
-            className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-            placeholder="John Doe"
           />
-        </Field>
-
-        <Field label="Company (Optional)" htmlFor="company">
-          <input
-            id="company"
+          <Field
+            label="Company"
             name="company"
             defaultValue={values?.company}
-            className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-            placeholder="SYNCra Ltd."
           />
-        </Field>
-      </div>
-
-      {/* Email + Phone */}
-      <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Email" htmlFor="email" required>
-          <input
-            id="email"
+          <Field
+            label="Email"
             name="email"
             type="email"
             required
             defaultValue={values?.email}
-            className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-            placeholder="you@example.com"
           />
-        </Field>
-
-        <Field label="WhatsApp Number" htmlFor="phone" required>
-          <input
-            id="phone"
+          <Field
+            label="WhatsApp Number"
             name="phone"
             required
             defaultValue={values?.phone}
-            className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-            placeholder="+234..."
           />
-        </Field>
-      </div>
+        </div>
 
-      {/* Service Dropdown */}
-      <Field label="Choose a Service" htmlFor="serviceIds" required>
-        <select
-          id="serviceIds"
-          name="serviceIds"
-          required
-          defaultValue={values?.serviceIds[0] ?? ""}
-          className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-        >
-          <option value="">Select a service</option>
-          {services.map((service) => (
-            <option key={service.id} value={service.id}>
-              {service.name}
-            </option>
-          ))}
-        </select>
-      </Field>
+        <div className="mt-6">
+          <p className="mb-3 text-sm text-slate-300">
+            Preferred contact
+          </p>
 
-      {/* Budget Chips */}
-      <fieldset>
-        <legend className="mb-3 text-sm font-semibold text-ink">
-          Estimated Budget
-        </legend>
-
-        <div className="flex flex-wrap gap-3">
-          {BUDGET_OPTIONS.map((option) => (
-            <label key={option} className="cursor-pointer">
-              <input
-                type="radio"
-                name="budget"
-                value={option}
-                defaultChecked={values?.budget === option}
-                className="peer hidden"
-              />
-              <span className="inline-flex rounded-full border border-rule px-4 py-2 text-sm text-ink transition peer-checked:border-deep-sea peer-checked:bg-deep-sea peer-checked:text-white hover:border-deep-sea">
-                {option}
-              </span>
-            </label>
-          ))}
+          <div className="flex flex-wrap gap-3">
+            {Object.entries(PREFERRED_CONTACT_LABELS).map(([value, label]) => (
+              <label
+                key={value}
+                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition hover:border-cyan-400/50 hover:bg-white/10"
+              >
+                <input
+                  type="radio"
+                  name="preferredContact"
+                  value={value}
+                  defaultChecked={values?.preferredContact === value}
+                  className="mr-2"
+                />
+                {label}
+              </label>
+            ))}
+          </div>
         </div>
       </fieldset>
 
-      {/* Timeline */}
-      <Field label="Timeline (Optional)" htmlFor="timeline">
-        <input
-          id="timeline"
-          name="timeline"
-          defaultValue={values?.timeline}
-          className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-          placeholder="2 weeks, 1 month..."
-        />
-      </Field>
-
-      {/* Preferred Contact */}
-      <fieldset>
-        <legend className="mb-3 text-sm font-semibold text-ink">
-          Preferred Contact Method
-        </legend>
-
-        <div className="flex flex-wrap gap-3">
-          {CONTACT_OPTIONS.map((item) => (
-            <label key={item.value} className="cursor-pointer">
-              <input
-                type="radio"
-                name="preferredContact"
-                value={item.value}
-                defaultChecked={values?.preferredContact === item.value}
-                className="peer hidden"
-                required
-              />
-              <span className="inline-flex rounded-full border border-rule px-4 py-2 text-sm text-ink transition peer-checked:border-deep-sea peer-checked:bg-deep-sea peer-checked:text-white hover:border-deep-sea">
-                {item.label}
-              </span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      {/* Project Description */}
-      <Field label="Project Details" htmlFor="description" required>
-        <textarea
-          id="description"
-          name="description"
-          rows={6}
-          required
-          defaultValue={values?.description}
-          className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-          placeholder="Tell us about your project, goals and anything important."
-        />
-      </Field>
-
-      {/* Current Website */}
-      <Field label="Current Website (Optional)" htmlFor="currentWebsite">
-        <input
-          id="currentWebsite"
-          name="currentWebsite"
-          defaultValue={values?.currentWebsite}
-          className="w-full rounded-xl border border-rule bg-surface px-4 py-3 text-ink outline-none transition focus:border-deep-sea focus:ring-2 focus:ring-deep-sea/20"
-          placeholder="https://..."
-        />
-      </Field>
-
-      <div className="pt-2">
+      <div className="fade-up fade-delay-3">
         <SubmitButton pendingLabel="Sending...">
-          Submit Inquiry
+          Send Inquiry
         </SubmitButton>
       </div>
     </form>
@@ -218,22 +179,42 @@ export function StartProjectForm({
 
 function Field({
   label,
-  htmlFor,
-  required,
-  children,
+  name,
+  type = "text",
+  textarea = false,
+  required = false,
+  defaultValue,
 }: {
   label: string;
-  htmlFor: string;
+  name: string;
+  type?: string;
+  textarea?: boolean;
   required?: boolean;
-  children: React.ReactNode;
+  defaultValue?: string;
 }) {
   return (
-    <div className="space-y-2">
-      <label htmlFor={htmlFor} className="text-sm font-semibold text-ink">
+    <div>
+      <label className="mb-2 block text-sm text-slate-300">
         {label}
-        {required && <span className="text-red-500"> *</span>}
       </label>
-      {children}
+
+      {textarea ? (
+        <textarea
+          name={name}
+          rows={5}
+          required={required}
+          defaultValue={defaultValue}
+          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 backdrop-blur-md transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none"
+        />
+      ) : (
+        <input
+          name={name}
+          type={type}
+          required={required}
+          defaultValue={defaultValue}
+          className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-slate-500 backdrop-blur-md transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 focus:outline-none"
+        />
+      )}
     </div>
   );
 }
