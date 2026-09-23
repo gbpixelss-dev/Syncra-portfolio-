@@ -21,12 +21,13 @@ export function Footer() {
           </span>
 
           <h2 className="mt-5 text-4xl font-bold leading-tight text-white sm:text-6xl">
-            Let's build something unforgettable.
+            Let&apos;s build something unforgettable.
           </h2>
 
           <p className="mt-6 text-lg leading-8 text-slate-300">
-            Whether it's a website, brand identity, content strategy or automation,
-            let's create work that actually leaves an impression.
+            Whether it&apos;s a website, brand identity, content strategy or
+            automation, let&apos;s create work that actually leaves an
+            impression.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
@@ -60,9 +61,7 @@ export function Footer() {
             <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">
               Location
             </p>
-            <p className="mt-3 text-white">
-              Lagos, Nigeria
-            </p>
+            <p className="mt-3 text-white">Lagos, Nigeria</p>
           </div>
 
           <div className="glass-card rounded-3xl p-6">
@@ -70,7 +69,7 @@ export function Footer() {
               Availability
             </p>
             <p className="mt-3 text-white">
-              Open for freelance & agency projects.
+              Open for freelance &amp; agency projects.
             </p>
           </div>
         </div>
@@ -100,7 +99,8 @@ export function Footer() {
         </div>
 
         <div className="mt-8 text-center text-xs text-slate-500">
-          © {new Date().getFullYear()} SYNCra Digital Agency. Built with precision.
+          © {new Date().getFullYear()} SYNCra Digital Agency. Built with
+          precision.
         </div>
       </div>
     </footer>
