@@ -1,70 +1,112 @@
+"use client";
+
 import Image from "next/image";
-import type { ProjectMedia as ProjectMediaItem } from "@/content/projects";
+import { useState } from "react";
 
-/**
- * Renders one media item according to its real type. EMBED renders
- * inside a same-origin-safe iframe (sandboxed, no fabricated
- * provider assumed beyond the stored URL itself).
- */
-export function ProjectMedia({
-  media,
-  title,
-}: {
-  media: ProjectMediaItem;
-  title: string;
-}) {
-  if (media.type === "IMAGE") {
-    return (
-      <figure>
-        <Image
-          src={media.url}
-          alt={media.alt ?? title}
-          width={1600}
-          height={1200}
-          className="w-full rounded border border-rule"
-        />
-        {media.caption && (
-          <figcaption className="annotation mt-2">{media.caption}</figcaption>
-        )}
-      </figure>
-    );
-  }
+type MediaItem = {
+  type: "IMAGE" | "VIDEO" | "EMBED";
+  url: string;
+  alt?: string | null;
+  caption?: string | null;
+  thumbnailUrl?: string | null;
+};
 
-  if (media.type === "VIDEO") {
-    return (
-      <figure>
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption -- captions/tracks come from real media data when supplied; none fabricated here */}
-        <video
-          src={media.url}
-          poster={media.thumbnailUrl}
-          controls
-          className="w-full rounded border border-rule"
-        >
-          {media.alt && <p>{media.alt}</p>}
-        </video>
-        {media.caption && (
-          <figcaption className="annotation mt-2">{media.caption}</figcaption>
-        )}
-      </figure>
-    );
-  }
+export function ProjectMedia({ media }: { media: MediaItem[] }) {
+  const [active, setActive] = useState(0);
 
-  // EMBED — external video (YouTube/Vimeo etc.)
+  if (!media?.length) return null;
+
+  const current = media[active];
+
   return (
-    <figure>
-      <div className="aspect-video w-full overflow-hidden rounded border border-rule">
-        <iframe
-          src={media.url}
-          title={media.alt ?? title}
-          className="h-full w-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          sandbox="allow-scripts allow-same-origin allow-presentation"
-        />
+    <div className="space-y-5">
+      <div className="glass-card relative overflow-hidden rounded-[32px] border border-cyan-400/10 bg-[#08111f] shadow-[0_0_60px_rgba(46,197,255,.08)]">
+        {current.type === "IMAGE" && (
+          <div className="group relative aspect-[16/10] overflow-hidden">
+            <Image
+              src={current.url}
+              alt={current.alt ?? "Project preview"}
+              fill
+              priority={active === 0}
+              className="object-cover transition duration-700 group-hover:scale-110"
+            />
+
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050816]/70 via-transparent to-transparent opacity-70 transition group-hover:opacity-100" />
+
+            <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
+              <div className="absolute inset-0 bg-cyan-400/5" />
+            </div>
+          </div>
+        )}
+
+        {current.type === "VIDEO" && (
+          <div className="group relative aspect-[16/10] overflow-hidden">
+            <video
+              controls
+              playsInline
+              className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.02]"
+            >
+              <source src={current.url} />
+            </video>
+
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050816]/60 to-transparent" />
+          </div>
+        )}
+
+        {current.type === "EMBED" && (
+          <div className="aspect-[16/10] overflow-hidden">
+            <iframe
+              src={current.url}
+              title="Project media"
+              className="h-full w-full border-0"
+              allowFullScreen
+            />
+          </div>
+        )}
+
+        {current.caption && (
+          <div className="border-t border-white/10 px-5 py-4">
+            <p className="text-sm text-slate-300">{current.caption}</p>
+          </div>
+        )}
       </div>
-      {media.caption && (
-        <figcaption className="annotation mt-2">{media.caption}</figcaption>
+
+      {media.length > 1 && (
+        <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
+          {media.map((item, index) => (
+            <button
+              key={item.url + index}
+              onClick={() => setActive(index)}
+              className={`group relative aspect-square overflow-hidden rounded-2xl border transition ${
+                active === index
+                  ? "border-cyan-400 shadow-[0_0_20px_rgba(46,197,255,.35)]"
+                  : "border-white/10 hover:border-cyan-400/40"
+              }`}
+            >
+              {item.type === "IMAGE" ? (
+                <Image
+                  src={item.thumbnailUrl || item.url}
+                  alt={item.alt ?? "Thumbnail"}
+                  fill
+                  className="object-cover transition duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-[#0b1528] text-cyan-300">
+                  <svg
+                    className="h-8 w-8"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="m8 5 11 7-11 7V5Z" />
+                  </svg>
+                </div>
+              )}
+
+              <div className="absolute inset-0 bg-black/20 opacity-0 transition group-hover:opacity-100" />
+            </button>
+          ))}
+        </div>
       )}
-    </figure>
+    </div>
   );
 }
