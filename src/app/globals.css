@@ -142,3 +142,36 @@ a {
   letter-spacing: 0.02em;
   color: var(--color-muted);
 }
+/* ===== SYNCra Wave 1 ===== */
+
+.hero-grid {
+  background-image:
+    linear-gradient(rgba(46,197,255,.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  animation: gridMove 18s linear infinite;
+}
+
+@keyframes gridMove {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(42px);
+  }
+}
+
+.hero-title {
+  animation: heroReveal .9s ease forwards;
+}
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
