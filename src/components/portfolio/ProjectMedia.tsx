@@ -11,12 +11,18 @@ type MediaItem = {
   thumbnailUrl?: string | null;
 };
 
-export function ProjectMedia({ media }: { media: MediaItem[] }) {
+export function ProjectMedia({
+  media,
+  title,
+}: {
+  media: MediaItem | MediaItem[];
+  title?: string;
+}) {
+  const items = Array.isArray(media) ? media : [media];
   const [active, setActive] = useState(0);
 
-  if (!media?.length) return null;
-
-  const current = media[active];
+  const current = items[active];
+  if (!current) return null;
 
   return (
     <div className="space-y-5">
@@ -25,17 +31,13 @@ export function ProjectMedia({ media }: { media: MediaItem[] }) {
           <div className="group relative aspect-[16/10] overflow-hidden">
             <Image
               src={current.url}
-              alt={current.alt ?? "Project preview"}
+              alt={current.alt ?? title ?? "Project preview"}
               fill
               priority={active === 0}
               className="object-cover transition duration-700 group-hover:scale-110"
             />
 
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050816]/70 via-transparent to-transparent opacity-70 transition group-hover:opacity-100" />
-
-            <div className="pointer-events-none absolute inset-0 opacity-0 transition duration-500 group-hover:opacity-100">
-              <div className="absolute inset-0 bg-cyan-400/5" />
-            </div>
           </div>
         )}
 
@@ -57,7 +59,7 @@ export function ProjectMedia({ media }: { media: MediaItem[] }) {
           <div className="aspect-[16/10] overflow-hidden">
             <iframe
               src={current.url}
-              title="Project media"
+              title={title ?? "Project media"}
               className="h-full w-full border-0"
               allowFullScreen
             />
@@ -71,9 +73,9 @@ export function ProjectMedia({ media }: { media: MediaItem[] }) {
         )}
       </div>
 
-      {media.length > 1 && (
+      {items.length > 1 && (
         <div className="grid grid-cols-4 gap-3 sm:grid-cols-6">
-          {media.map((item, index) => (
+          {items.map((item, index) => (
             <button
               key={item.url + index}
               onClick={() => setActive(index)}
@@ -86,7 +88,7 @@ export function ProjectMedia({ media }: { media: MediaItem[] }) {
               {item.type === "IMAGE" ? (
                 <Image
                   src={item.thumbnailUrl || item.url}
-                  alt={item.alt ?? "Thumbnail"}
+                  alt={item.alt ?? title ?? "Thumbnail"}
                   fill
                   className="object-cover transition duration-500 group-hover:scale-110"
                 />
