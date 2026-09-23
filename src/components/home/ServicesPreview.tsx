@@ -3,43 +3,85 @@ import { Container } from "@/components/ui/Container";
 import { getPublishedServices } from "@/content/services";
 
 const icons = [
-  // Web Development
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16" />
-  </svg>,
+  (
+    <svg
+      key="web"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M8 7 3 12l5 5M16 7l5 5-5 5M14 4l-4 16" />
+    </svg>
+  ),
 
-  // Graphic Design
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="9" />
-    <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-    <circle cx="16" cy="8" r="1.5" fill="currentColor" />
-    <circle cx="8" cy="16" r="1.5" fill="currentColor" />
-  </svg>,
+  (
+    <svg
+      key="design"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+      <circle cx="16" cy="8" r="1.5" fill="currentColor" />
+      <circle cx="8" cy="16" r="1.5" fill="currentColor" />
+    </svg>
+  ),
 
-  // Content Creation
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="3" y="5" width="18" height="14" rx="2" />
-    <path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none" />
-  </svg>,
+  (
+    <svg
+      key="video"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m10 9 5 3-5 3z" fill="currentColor" stroke="none" />
+    </svg>
+  ),
 
-  // AI
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="3" />
-    <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" />
-  </svg>,
+  (
+    <svg
+      key="ai"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <circle cx="12" cy="12" r="3" />
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2" />
+    </svg>
+  ),
 
-  // Automation
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 12h8M13 12h8" />
-    <circle cx="12" cy="12" r="2" />
-    <path d="m9 9 3-3 3 3M9 15l3 3 3-3" />
-  </svg>,
+  (
+    <svg
+      key="automation"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M3 12h8M13 12h8" />
+      <circle cx="12" cy="12" r="2" />
+      <path d="m9 9 3-3 3 3M9 15l3 3 3-3" />
+    </svg>
+  ),
 
-  // Default
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M12 2 3 7l9 5 9-5-9-5ZM3 17l9 5 9-5" />
-    <path d="M3 12l9 5 9-5" />
-  </svg>,
+  (
+    <svg
+      key="default"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M12 2 3 7l9 5 9-5-9-5ZM3 17l9 5 9-5" />
+      <path d="M3 12l9 5 9-5" />
+    </svg>
+  ),
 ];
 
 export async function ServicesPreview() {
@@ -47,7 +89,6 @@ export async function ServicesPreview() {
 
   return (
     <section className="relative overflow-hidden bg-[#050816]">
-      {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 h-80 w-80 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[120px]" />
       </div>
