@@ -2,94 +2,124 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export function Hero() {
+const links = [
+  { name: "Home", href: "/" },
+  { name: "Portfolio", href: "/portfolio" },
+  { name: "Services", href: "/services" },
+  { name: "Start a Project", href: "/start-a-project" },
+];
+
+export function Header() {
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    onScroll();
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setMenuOpen(false), [pathname]);
+
   return (
-    <section className="relative overflow-hidden bg-[#050816]">
-      {/* Ambient Lighting */}
-      <div className="absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-cyan-400/15 blur-[170px]" />
-        <div className="absolute -right-24 top-1/3 h-[320px] w-[320px] rounded-full bg-blue-500/10 blur-[140px]" />
-        <div className="absolute inset-0 hero-grid opacity-[0.06]" />
+    <header
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "border-b border-cyan-400/10 bg-[#071221]/75 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,.35)]"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
+        <Link href="/" className="group flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/30 bg-cyan-400/10 text-lg font-bold text-cyan-300 transition group-hover:scale-105 group-hover:shadow-[0_0_20px_rgba(46,197,255,.45)]">
+            S
+          </div>
+
+          <div>
+            <p className="font-semibold tracking-wide text-white">SYNCra</p>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-cyan-300">
+              DIGITAL AGENCY
+            </p>
+          </div>
+        </Link>
+
+        <nav className="hidden items-center gap-8 lg:flex">
+          {links.map((link) => {
+            const active = pathname === link.href;
+
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative text-sm transition ${
+                  active ? "text-cyan-300" : "text-slate-300 hover:text-white"
+                }`}
+              >
+                {link.name}
+                <span
+                  className={`absolute -bottom-2 left-0 h-[2px] bg-cyan-300 transition-all duration-300 ${
+                    active ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="hidden lg:block">
+          <Link
+            href="/start-a-project"
+            className="rounded-full bg-cyan-400 px-6 py-3 font-semibold text-[#04111f] transition hover:scale-105 hover:shadow-[0_0_25px_rgba(46,197,255,.35)]"
+          >
+            Start a Project
+          </Link>
+        </div>
+
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white backdrop-blur-xl lg:hidden"
+        >
+          {menuOpen ? "✕" : "☰"}
+        </button>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 pb-24 pt-36 sm:pb-32 sm:pt-44">
-        <div className="max-w-4xl">
-          <span className="inline-flex rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-xs uppercase tracking-[0.35em] text-cyan-300 backdrop-blur-xl">
-            SYNCRA DIGITAL AGENCY
-          </span>
+      <div
+        className={`overflow-hidden transition-all duration-500 lg:hidden ${
+          menuOpen ? "max-h-[420px]" : "max-h-0"
+        }`}
+      >
+        <div className="border-t border-white/10 bg-[#071221]/95 px-5 py-6 backdrop-blur-xl">
+          <div className="flex flex-col gap-5">
+            {links.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={
+                  pathname === link.href
+                    ? "text-cyan-300"
+                    : "text-slate-300 hover:text-white"
+                }
+              >
+                {link.name}
+              </Link>
+            ))}
 
-          <h1 className="mt-8 text-5xl font-bold leading-[1.02] text-white sm:text-7xl">
-            We build
-            <span className="block bg-gradient-to-r from-cyan-300 via-white to-blue-400 bg-clip-text text-transparent">
-              unforgettable
-            </span>
-            digital experiences.
-          </h1>
-
-          <p className="mt-8 max-w-2xl text-lg leading-8 text-slate-300">
-            Websites, branding, content creation and automation crafted with a
-            luxury finish—not just another template.
-          </p>
-
-          <div className="mt-12 flex flex-wrap gap-4">
             <Link
               href="/start-a-project"
-              className="rounded-full bg-cyan-400 px-8 py-4 font-semibold text-[#04111f] transition hover:scale-105 hover:shadow-[0_0_35px_rgba(46,197,255,.35)]"
+              className="mt-2 rounded-full bg-cyan-400 px-6 py-3 text-center font-semibold text-[#04111f]"
             >
-              Start a Project →
+              Start a Project
             </Link>
-
-            <Link
-              href="/portfolio"
-              className="rounded-full border border-white/10 bg-white/5 px-8 py-4 text-white backdrop-blur-xl transition hover:border-cyan-400/30 hover:bg-white/8"
-            >
-              View Portfolio
-            </Link>
-          </div>
-        </div>
-
-        {/* Floating Glass Showcase */}
-        <div className="mt-20 hidden lg:block">
-          <div className="glass-card mx-auto max-w-5xl rounded-[32px] border border-white/10 bg-white/[0.03] p-8 backdrop-blur-xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-5">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">
-                  Live System
-                </p>
-                <h3 className="mt-2 text-2xl font-semibold text-white">
-                  Premium Digital Stack
-                </h3>
-              </div>
-
-              <div className="flex gap-2">
-                <span className="h-3 w-3 rounded-full bg-red-400/70" />
-                <span className="h-3 w-3 rounded-full bg-yellow-400/70" />
-                <span className="h-3 w-3 rounded-full bg-green-400/70" />
-              </div>
-            </div>
-
-            <div className="mt-8 grid gap-6 md:grid-cols-3">
-              {[
-                { title: "Web Development", text: "Modern business websites." },
-                { title: "Graphic Design", text: "Luxury visual identity." },
-                { title: "Content Creation", text: "Videos that convert." },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:border-cyan-400/30 hover:bg-white/8"
-                >
-                  <div className="mb-4 h-10 w-10 rounded-xl bg-cyan-400/10" />
-                  <h4 className="text-lg font-semibold text-white">
-                    {item.title}
-                  </h4>
-                  <p className="mt-2 text-sm text-slate-300">{item.text}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
-    </section>
+    </header>
   );
 }
+
+export default Header;
