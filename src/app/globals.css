@@ -210,3 +210,37 @@ a {
     transform:translateY(0);
   }
 }
+/* ========= Wave 5 Particles ========= */
+
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:999px;
+  background:rgba(46,197,255,.8);
+  box-shadow:0 0 12px rgba(46,197,255,.7);
+  animation:floatParticle linear infinite;
+}
+
+.p1{left:8%;top:22%;animation-duration:18s;}
+.p2{left:24%;top:68%;animation-duration:23s;}
+.p3{left:43%;top:35%;animation-duration:20s;}
+.p4{left:58%;top:82%;animation-duration:26s;}
+.p5{left:72%;top:18%;animation-duration:21s;}
+.p6{left:86%;top:55%;animation-duration:24s;}
+.p7{left:34%;top:88%;animation-duration:27s;}
+.p8{left:92%;top:8%;animation-duration:22s;}
+
+@keyframes floatParticle{
+  0%{
+    transform:translateY(0) scale(.8);
+    opacity:.25;
+  }
+  50%{
+    opacity:1;
+  }
+  100%{
+    transform:translateY(-140px) scale(1.15);
+    opacity:.2;
+  }
+}
