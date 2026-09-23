@@ -9,8 +9,7 @@
    of this file — components/Tailwind config reference these variables.
    ========================================================================== */
 :root {
-  /* Brand colors — approved palette. The logo keeps its own independent
-     metallic gradient and is never re-derived from these tokens. */
+  /* Brand colors */
   --color-deep-sea: #156874;
   --color-deep-sea-dark: #0e4750;
   --color-steam: #ede6e6;
@@ -18,19 +17,18 @@
   --color-ink: #1b2124;
   --color-muted: #6e7a7d;
 
-  /* Structural — Blueprint hairline rules, kept restrained and
-     purposeful rather than decorative. */
+  /* Structural */
   --color-rule: #d8dcdd;
 
-  /* Spacing / layout */
+  /* Layout */
   --container-max-width: 1280px;
-  --gutter: 1rem; /* overridden at larger breakpoints below */
+  --gutter: 1rem;
 
-  /* Radius — deliberately minimal per the Blueprint direction */
+  /* Radius */
   --radius-sm: 2px;
   --radius-md: 4px;
 
-  /* Typography — variables populated by next/font in layout.tsx */
+  /* Typography */
   --font-sans: system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 }
@@ -48,8 +46,9 @@
 }
 
 /* ==========================================================================
-   Reset / base
+   Reset
    ========================================================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -57,6 +56,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -93,14 +93,16 @@ a {
 /* ==========================================================================
    Selection
    ========================================================================== */
+
 ::selection {
   background-color: var(--color-deep-sea);
   color: var(--color-steam);
 }
 
 /* ==========================================================================
-   Focus visibility — accessibility foundation
+   Focus visibility
    ========================================================================== */
+
 :focus {
   outline: none;
 }
@@ -114,6 +116,7 @@ a {
 /* ==========================================================================
    Reduced motion
    ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -126,11 +129,9 @@ a {
 }
 
 /* ==========================================================================
-   Blueprint structural primitives
-   Real, reusable, minimal — not decoration applied everywhere. Used only
-   where a later page genuinely needs a hairline rule or a real-data
-   annotation label.
+   Blueprint utilities
    ========================================================================== */
+
 .rule {
   border: none;
   border-top: 1px solid var(--color-rule);
@@ -142,13 +143,16 @@ a {
   letter-spacing: 0.02em;
   color: var(--color-muted);
 }
-/* ===== SYNCra Wave 1 ===== */
+
+/* ==========================================================================
+   Wave 1 — Hero Foundation
+   ========================================================================== */
 
 .hero-grid {
   background-image:
-    linear-gradient(rgba(46,197,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
-  background-size: 42px 42px;
+    linear-gradient(rgba(46, 197, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(46, 197, 255, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
   animation: gridMove 18s linear infinite;
 }
 
@@ -157,12 +161,12 @@ a {
     transform: translateY(0);
   }
   to {
-    transform: translateY(42px);
+    transform: translateY(48px);
   }
 }
 
 .hero-title {
-  animation: heroReveal .9s ease forwards;
+  animation: heroReveal 0.9s ease forwards;
 }
 
 @keyframes heroReveal {
@@ -175,84 +179,148 @@ a {
     transform: translateY(0);
   }
 }
-/* ===== SYNCra Wave 2 ===== */
 
-.glass-card{
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(22px);
-  -webkit-backdrop-filter:blur(22px);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:28px;
-  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+/* ==========================================================================
+   Wave 2 — Glass UI
+   ========================================================================== */
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
 }
 
-.glass-card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(46,197,255,.45);
+.glass-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(46, 197, 255, 0.45);
   box-shadow:
-    0 0 50px rgba(46,197,255,.18),
-    0 20px 60px rgba(0,0,0,.35);
+    0 0 50px rgba(46, 197, 255, 0.18),
+    0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
-.fade-up{
-  opacity:0;
-  transform:translateY(24px);
-  animation:fadeUp .8s ease forwards;
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: fadeUp 0.8s ease forwards;
 }
 
-.fade-delay-1{animation-delay:.08s;}
-.fade-delay-2{animation-delay:.16s;}
-.fade-delay-3{animation-delay:.24s;}
+.fade-delay-1 {
+  animation-delay: 0.08s;
+}
 
-@keyframes fadeUp{
-  to{
-    opacity:1;
-    transform:translateY(0);
+.fade-delay-2 {
+  animation-delay: 0.16s;
+}
+
+.fade-delay-3 {
+  animation-delay: 0.24s;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-/* ========= Wave 5 Particles ========= */
 
-.particle{
-  position:absolute;
-  width:4px;
-  height:4px;
-  border-radius:999px;
-  background:rgba(46,197,255,.8);
-  box-shadow:0 0 12px rgba(46,197,255,.7);
-  animation:floatParticle linear infinite;
+/* ==========================================================================
+   Wave 5 — CSS Reveal System (NEW)
+   This replaces the Framer Motion dependency completely.
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: revealUp 0.8s ease forwards;
 }
 
-.p1{left:8%;top:22%;animation-duration:18s;}
-.p2{left:24%;top:68%;animation-duration:23s;}
-.p3{left:43%;top:35%;animation-duration:20s;}
-.p4{left:58%;top:82%;animation-duration:26s;}
-.p5{left:72%;top:18%;animation-duration:21s;}
-.p6{left:86%;top:55%;animation-duration:24s;}
-.p7{left:34%;top:88%;animation-duration:27s;}
-.p8{left:92%;top:8%;animation-duration:22s;}
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-@keyframes floatParticle{
-  0%{
-    transform:translateY(0) scale(.8);
-    opacity:.25;
-  }
-  50%{
-    opacity:1;
-  }
-  100%{
-    transform:translateY(-140px) scale(1.15);
-    opacity:.2;
-  }
+/* ==========================================================================
+   Wave 5 — Floating Particles
+   ========================================================================== */
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(46, 197, 255, 0.8);
+  box-shadow: 0 0 12px rgba(46, 197, 255, 0.7);
+  animation: floatParticle linear infinite;
 }
-.hero-grid{
-  background-image:
-    linear-gradient(rgba(46,197,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
-  background-size:48px 48px;
+
+.p1 {
+  left: 8%;
+  top: 22%;
+  animation-duration: 18s;
 }
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(46,197,255,.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(46,197,255,.08) 1px, transparent 1px);
-  background-size:48px 48px;
+
+.p2 {
+  left: 24%;
+  top: 68%;
+  animation-duration: 23s;
+}
+
+.p3 {
+  left: 43%;
+  top: 35%;
+  animation-duration: 20s;
+}
+
+.p4 {
+  left: 58%;
+  top: 82%;
+  animation-duration: 26s;
+}
+
+.p5 {
+  left: 72%;
+  top: 18%;
+  animation-duration: 21s;
+}
+
+.p6 {
+  left: 86%;
+  top: 55%;
+  animation-duration: 24s;
+}
+
+.p7 {
+  left: 34%;
+  top: 88%;
+  animation-duration: 27s;
+}
+
+.p8 {
+  left: 92%;
+  top: 8%;
+  animation-duration: 22s;
+}
+
+@keyframes floatParticle {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-140px) scale(1.15);
+    opacity: 0.2;
+  }
 }
