@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -12,7 +13,7 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
-export default function Header() {
+export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -24,7 +25,9 @@ export default function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false), [pathname]);
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <header
@@ -36,9 +39,12 @@ export default function Header() {
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5">
         <Link href="/" className="group flex items-center gap-3">
-          <img
+          <Image
             src="/logo.png"
             alt="SYNCra"
+            width={44}
+            height={44}
+            priority
             className="h-10 w-auto transition duration-300 group-hover:drop-shadow-[0_0_18px_rgba(46,197,255,.65)]"
           />
         </Link>
@@ -121,3 +127,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default Header;
